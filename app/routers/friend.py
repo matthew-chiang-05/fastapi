@@ -10,14 +10,37 @@ router = APIRouter(
     tags=['Friends']
 )
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.FriendRequestOut)
+@router.post("/requests", status_code=status.HTTP_201_CREATED, response_model=schemas.FriendRequestOut)
 def send_friend_request(friend: schemas.FriendRequest, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    # cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """, 
-    #                 (post.title, post.content, post.published))
-    # new_post = cursor.fetchone()
-    # conn.commit()
+    
+    user = db.query(models.User).filter(models.User.id==friend.id).first()
+    
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id: {friend.id} does not exist")
+    
+    found_friend_request = db.query(models.Friend_Request).filter(
+        models.Friend_Request.user_request_id==current_user.id, models.Friend_Request.user_recieve_id==friend.id).first()
+    
+    if found_friend_request:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"There is already an outgoing friend request to user {friend.id}")
+    
+    
     new_friend_request = models.Friend_Request(user_request_id=current_user.id, user_recieve_id=friend.id)
+    
     db.add(new_friend_request)
     db.commit()
     db.refresh(new_friend_request)
+    
     return new_friend_request
+
+@router.get("/requests", response_model=List[schemas.FriendRecieveOut])
+def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    # cursor.execute("""SELECT * FROM posts """)
+    # posts = cursor.fetchall()
+    
+    #posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    
+    results = db.query(models.Friend_Request).filter(models.Friend_Request.user_recieve_id==current_user.id)
+    
+    
+    return results

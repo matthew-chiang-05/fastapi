@@ -35,7 +35,13 @@ class Friend_Request(Base):
     __tablename__ = "friend_requests"
     
     user_request_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+    
     user_recieve_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+    
+    user_request = relationship("User", foreign_keys=[user_request_id])
+    
+    user_recieve = relationship("User", foreign_keys=[user_recieve_id])
+    
 
 class Friend(Base):
     __tablename__ = "friends"
