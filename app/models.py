@@ -30,3 +30,15 @@ class Vote(Base):
     user_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
     post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True)
     
+
+class Friend_Request(Base):
+    __tablename__ = "friend_requests"
+    
+    user_request_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+    user_recieve_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+
+class Friend(Base):
+    __tablename__ = "friends"
+    
+    user_one = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+    user_two = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)

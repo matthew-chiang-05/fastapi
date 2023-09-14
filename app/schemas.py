@@ -53,3 +53,10 @@ class TokenData(BaseModel):
 class Vote(BaseModel):
     post_id: int
     dir: conint(le=1)
+    
+class FriendRequest(BaseModel):
+    id: int
+    
+class FriendRequestOut(BaseModel):
+    user_request_id: int
+    user_recieve_id: int
