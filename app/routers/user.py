@@ -39,7 +39,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
     
     return user
 
-@router.delete("/users/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(id: int, db: Session = Depends(get_db)):
     
     pass

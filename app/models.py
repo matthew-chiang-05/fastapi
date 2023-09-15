@@ -46,5 +46,10 @@ class Friend_Request(Base):
 class Friend(Base):
     __tablename__ = "friends"
     
-    user_one = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
-    user_two = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+    
+    friend_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
+    
+    user = relationship("User", foreign_keys=[user_id])
+    
+    friend = relationship("User", foreign_keys=[friend_id])

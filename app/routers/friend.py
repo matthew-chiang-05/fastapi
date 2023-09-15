@@ -10,22 +10,33 @@ router = APIRouter(
     tags=['Friends']
 )
 
-@router.post("/requests", status_code=status.HTTP_201_CREATED, response_model=schemas.FriendRequestOut)
-def send_friend_request(friend: schemas.FriendRequest, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+@router.post("/requests/send/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.FriendRequestOut)
+def send_friend_request(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     
-    user = db.query(models.User).filter(models.User.id==friend.id).first()
+    user = db.query(models.User).filter(models.User.id==id).first()
     
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id: {friend.id} does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id: {id} does not exist")
     
     found_friend_request = db.query(models.Friend_Request).filter(
-        models.Friend_Request.user_request_id==current_user.id, models.Friend_Request.user_recieve_id==friend.id).first()
+        models.Friend_Request.user_request_id==current_user.id, models.Friend_Request.user_recieve_id==id).first()
     
     if found_friend_request:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"There is already an outgoing friend request to user {friend.id}")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"There is already an outgoing friend request to user {id}")
+    
+    found_incoming_request = db.query(models.Friend_Request).filter(
+        models.Friend_Request.user_recieve_id==current_user.id,models.Friend_Request.user_request_id==id).first()
+    
+    if found_incoming_request:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail=f"User {id} has sent you a friend request already")
+    
+    already_friends = db.query(models.Friend).filter(models.Friend.user_id==current_user.id, models.Friend.friend_id==id).first()
+    
+    if already_friends:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"You are already friends with user {id}")
     
     
-    new_friend_request = models.Friend_Request(user_request_id=current_user.id, user_recieve_id=friend.id)
+    new_friend_request = models.Friend_Request(user_request_id=current_user.id, user_recieve_id=id)
     
     db.add(new_friend_request)
     db.commit()
@@ -35,12 +46,44 @@ def send_friend_request(friend: schemas.FriendRequest, db: Session = Depends(get
 
 @router.get("/requests", response_model=List[schemas.FriendRecieveOut])
 def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    # cursor.execute("""SELECT * FROM posts """)
-    # posts = cursor.fetchall()
     
-    #posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
-    
-    results = db.query(models.Friend_Request).filter(models.Friend_Request.user_recieve_id==current_user.id)
-    
+    results = db.query(models.Friend_Request).filter(models.Friend_Request.user_recieve_id==current_user.id).all()
     
     return results
+
+@router.post("/requests/accept/{id}")
+def accept_friend_request(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    
+    user = db.query(models.User).filter(models.User.id==id).first()
+    
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id : {id} does not exist")
+    
+    already_friends = db.query(models.Friend).filter(models.Friend.user_id==current_user.id, models.Friend.friend_id==id).first()
+    
+    if already_friends:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"You are already friends with user {id}")
+    
+    accept_query = db.query(models.Friend_Request).filter(models.Friend_Request.user_request_id==id, models.Friend_Request.user_recieve_id==current_user.id)
+    
+    if not accept_query.first():
+        raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED,detail=f"Invalid: User {id} has not sent you a friend request")
+    
+    accept_query.delete(synchronize_session=False)
+    
+    friendlink1 = models.Friend(user_id=id, friend_id=current_user.id)
+    friendlink2 = models.Friend(user_id=current_user.id, friend_id=id)
+    
+    #db.add(friendlink1, friendlink2)
+    db.add(friendlink1)
+    db.add(friendlink2)
+    db.commit()
+    #db.refresh(friendlink1, friendlink2)
+    db.refresh(friendlink1)
+    db.refresh(friendlink2)
+    
+    return({"message": f"You are now friends with user: {id}"})
+    
+    
+    
+    
