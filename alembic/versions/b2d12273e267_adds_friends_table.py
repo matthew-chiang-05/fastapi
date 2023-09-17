@@ -1,4 +1,4 @@
-"""Adds friends table
+"""Adds friends table // FAILED
 
 Revision ID: b2d12273e267
 Revises: 34cf0571e095

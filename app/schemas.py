@@ -68,3 +68,7 @@ class FriendRequestOut(BaseModel):
 class FriendRecieveOut(BaseModel):
     
     user_request: UserFriendOut
+
+class FriendlistOut(BaseModel):
+    
+    friend: UserFriendOut

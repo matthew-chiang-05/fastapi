@@ -45,7 +45,7 @@ def send_friend_request(id: int, db: Session = Depends(get_db), current_user: in
     return new_friend_request
 
 @router.get("/requests", response_model=List[schemas.FriendRecieveOut])
-def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+def get_friend_requests(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     
     results = db.query(models.Friend_Request).filter(models.Friend_Request.user_recieve_id==current_user.id).all()
     
@@ -83,6 +83,13 @@ def accept_friend_request(id: int, db: Session = Depends(get_db), current_user: 
     db.refresh(friendlink2)
     
     return({"message": f"You are now friends with user: {id}"})
+
+@router.get("/", response_model=List[schemas.FriendlistOut])
+def get_friends(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    
+    results = db.query(models.Friend).filter(models.Friend.user_id == current_user.id).all()
+    
+    return results
     
     
     
