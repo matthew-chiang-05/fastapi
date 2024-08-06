@@ -21,9 +21,12 @@ def get_users(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, sea
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     
     # Hash the password
+    user_query = db.query(models.User).filter(models.User.email == user.email).first()
+    if user_query:
+        raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="User email already exists")
+    
     hashed_password = utils.hash(user.password)
     user.password = hashed_password
-    
     new_user = models.User(**user.model_dump())
     db.add(new_user)
     db.commit()
