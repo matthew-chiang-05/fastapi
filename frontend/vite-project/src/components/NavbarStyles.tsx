@@ -43,3 +43,24 @@ export const NavLinks = styled(Link)`
   cursor: pointer;
   font-size: 1.25rem;
 `;
+
+export const LogoutButton = styled.button`
+  color: white;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 1.25rem;
+  margin-left: 30px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+  font-size: 1.25rem;
+
+  &:hover {
+    background-color: #555;
+  }
+`;
