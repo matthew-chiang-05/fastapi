@@ -8,13 +8,13 @@ import {
 } from "./NavbarStyles";
 
 export const Navbar = () => {
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   return (
     <NavContainer>
       <NavLinks to="/home">SocialSync</NavLinks>
       <NavMenu>
         <NavItem>
-          <NavLinks to="/post">Create</NavLinks>
+          <NavLinks to="/post">Post</NavLinks>
         </NavItem>
         <NavItem>
           <NavLinks to="/friends">Friends</NavLinks>
@@ -23,9 +23,12 @@ export const Navbar = () => {
           <NavLinks to="/profile">Profile</NavLinks>
         </NavItem>
         <NavItem>
-          <NavLinks to="/login">
-            <LogoutButton onClick={logout}>Logout</LogoutButton>
-          </NavLinks>
+          {!isAuthenticated && <NavLinks to="/login">Login</NavLinks>}
+          {isAuthenticated && (
+            <NavLinks to="/login" onClick={logout}>
+              Logout
+            </NavLinks>
+          )}
         </NavItem>
       </NavMenu>
     </NavContainer>

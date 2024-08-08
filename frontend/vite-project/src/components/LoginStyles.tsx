@@ -9,6 +9,7 @@ export const LoginContainer = styled.div`
   margin-left: 50px;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 `;
 
 export const LoginTitle = styled.h1`
@@ -21,6 +22,7 @@ export const LoginInput = styled.input`
   height: 30px;
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-right: 10px;
 `;
 
 export const LoginButton = styled.button`

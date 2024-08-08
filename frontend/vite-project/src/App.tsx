@@ -7,6 +7,7 @@ import Post from "./pages/Post";
 import Login from "./pages/Login";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { AuthProvider } from "./components/AuthContext";
+import CreateUser from "./pages/CreateUser";
 function App() {
   return (
     <AuthProvider>
@@ -14,6 +15,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<CreateUser />} />
           <Route
             path="/home"
             element={
@@ -22,9 +24,30 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/post" element={<Post />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/friends" element={<Friends />} />
+          <Route
+            path="/friends"
+            element={
+              <PrivateRoute>
+                <Friends />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/post"
+            element={
+              <PrivateRoute>
+                <Post />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>
