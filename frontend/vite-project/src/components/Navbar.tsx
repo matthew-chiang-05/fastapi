@@ -1,11 +1,5 @@
 import { useAuth } from "./AuthContext";
-import {
-  LogoutButton,
-  NavContainer,
-  NavItem,
-  NavLinks,
-  NavMenu,
-} from "./NavbarStyles";
+import { NavContainer, NavItem, NavLinks, NavMenu } from "./NavbarStyles";
 
 export const Navbar = () => {
   const { logout, isAuthenticated } = useAuth();
