@@ -5,7 +5,7 @@ export const Navbar = () => {
   const { logout, isAuthenticated } = useAuth();
   return (
     <NavContainer>
-      <NavLinks to="/home">SocialSync</NavLinks>
+      <NavLinks to="/">SocialSync</NavLinks>
       <NavMenu>
         <NavItem>
           <NavLinks to="/post">Post</NavLinks>

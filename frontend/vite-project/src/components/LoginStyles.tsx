@@ -61,3 +61,17 @@ export const LoginPictureContainer = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+export const CreateUserButton = styled.button`
+  width: 200px;
+  height: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+export const CreateUserButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;

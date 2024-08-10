@@ -4,6 +4,7 @@ import {
   CreateUserTitle,
   CreateUserButton,
   CreateUserForm,
+  CreateUserError,
 } from "../components/CreateUserStyles";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -13,12 +14,14 @@ const CreateUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordErrorStatus, setPasswordErrorStatus] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
       console.error("Passwords do not match");
+      setPasswordErrorStatus(true);
       return;
     }
     try {
@@ -63,6 +66,9 @@ const CreateUser = () => {
         />
         <CreateUserButton type="submit">Create</CreateUserButton>
       </CreateUserForm>
+      {passwordErrorStatus && (
+        <CreateUserError>Passwords do not match</CreateUserError>
+      )}
     </CreateUserContainer>
   );
 };

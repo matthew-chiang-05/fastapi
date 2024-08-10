@@ -13,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { login } = useAuth();
   const Navigate = useNavigate();
-
+  const [loginStatus, setLoginStatus] = useState(false);
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -25,16 +25,17 @@ const Login = () => {
         "http://127.0.0.1:8000/login/",
         formData
       );
-
       if (response.status === 200) {
         const { access_token } = response.data;
         login(access_token);
-        Navigate("/Home");
+        Navigate("/");
       } else {
-        console.error("Login failed");
+        console.log("Login failed");
+        setLoginStatus(true);
       }
     } catch (error) {
       console.error(error);
+      setLoginStatus(true);
     }
   };
   return (
@@ -57,6 +58,7 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      {loginStatus && <p>Login failed</p>}
       <a href="/signup">Don't have an account? Signup</a>
     </LoginContainer>
   );

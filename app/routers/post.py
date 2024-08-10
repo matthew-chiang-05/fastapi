@@ -18,7 +18,7 @@ def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.
     #posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
     
     results = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(
-        models.Vote,models.Vote.post_id==models.Post.id, isouter=True).group_by(models.Post.id).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+        models.Vote,models.Vote.post_id==models.Post.id, isouter=True).filter(models.Post.title.contains(search)).group_by(models.Post.id).order_by(models.Post.created_at.desc()).limit(limit).offset(skip).all()
     
     return results
 
