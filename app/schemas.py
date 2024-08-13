@@ -52,7 +52,6 @@ class TokenData(BaseModel):
 
 class Vote(BaseModel):
     post_id: int
-    dir: Literal[0,1]
     
 class UserFriendOut(BaseModel):
     id: int

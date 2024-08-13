@@ -82,3 +82,10 @@ export const HomePostContent = styled.p`
   overflow: hidden;
   white-space: nowrap;
 `;
+
+export const HomePostLikeButton = styled.button`
+  width: 100px;
+  height: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+`;
