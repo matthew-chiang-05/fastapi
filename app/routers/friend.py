@@ -10,7 +10,7 @@ router = APIRouter(
     tags=['Friends']
 )
 
-@router.post("/requests/send/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.FriendRequestOut)
+@router.post("/requests/send/{id}", status_code=status.HTTP_201_CREATED, response_model=List[schemas.FriendRequestOut])
 def send_friend_request(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     
     user = db.query(models.User).filter(models.User.id==id).first()

@@ -38,6 +38,8 @@ class Friend_Request(Base):
     
     user_recieve_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), primary_key=True)
     
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default= text('NOW()'))
+    
     user_request = relationship("User", foreign_keys=[user_request_id])
     
     user_recieve = relationship("User", foreign_keys=[user_recieve_id])

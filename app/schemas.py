@@ -63,10 +63,16 @@ class FriendRequest(BaseModel):
 class FriendRequestOut(BaseModel):
     
     user_recieve: UserFriendOut  
-
+    created_at: datetime
+    class Config:
+        from_attributes = True
 class FriendRecieveOut(BaseModel):
     
     user_request: UserFriendOut
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
 
 class FriendlistOut(BaseModel):
     
