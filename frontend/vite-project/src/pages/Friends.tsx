@@ -5,10 +5,11 @@ import {
   FriendRequestsContainer,
   FriendsContainer,
   FriendListTitle,
-  FriendPosts,
-  FriendPostsContainer,
-  FriendPostsTitle,
   FriendList,
+  FriendSearchContainer,
+  FriendSearchTitle,
+  FriendSearchInput,
+  FriendSearchButton,
 } from "../components/FriendStyles";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -77,37 +78,10 @@ export const Friends = () => {
       console.log(err);
     }
   };
-  const getFriendPosts = async () => {
-    try {
-      const res = await axios.get("http://127.0.0.1:8000/posts/friends", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const extractedFriendPosts = res.data.map((item: any) => {
-        return {
-          id: item.Post.id,
-          title: item.Post.title,
-          content: item.Post.content,
-          published: item.Post.published,
-          created_at: item.Post.created_at,
-          owner: {
-            email: item.Post.owner.email,
-            id: item.Post.owner.id,
-            owner_created_at: item.Post.owner.created_at,
-          },
-          votes: item.votes,
-        };
-      });
-      setFriendPosts(extractedFriendPosts);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
   useEffect(() => {
     getFriendRequests();
     getFriends();
-    getFriendPosts();
   }, []);
   return (
     <FriendsContainer>
@@ -119,18 +93,11 @@ export const Friends = () => {
           friends.map((friend: any) => <FriendList>{friend.email}</FriendList>)
         )}
       </FriendListContainer>
-      <FriendPostsContainer>
-        <FriendPostsTitle>See what your friends are up to!</FriendPostsTitle>
-        {friendPosts.length === 0 ? (
-          <div>No Posts</div>
-        ) : (
-          friendPosts.map((post: FriendPost) => (
-            //TODO
-            <FriendPosts>{post.content}</FriendPosts>
-          ))
-        )}
-        <FriendPosts></FriendPosts>
-      </FriendPostsContainer>
+      <FriendSearchContainer>
+        <FriendSearchTitle>Discover Some Friends!</FriendSearchTitle>
+        <FriendSearchInput placeholder="Search for friends"></FriendSearchInput>
+        <FriendSearchButton>Search</FriendSearchButton>
+      </FriendSearchContainer>
       {friendRequests.length === 0 ? (
         <div>No Friend Requests</div>
       ) : (

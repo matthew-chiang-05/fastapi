@@ -55,13 +55,12 @@ export const FriendList = styled.li`
   list-style: none;
 `;
 
-export const FriendPostsContainer = styled.div`
+export const FriendSearchContainer = styled.div`
   font-color: black;
   display: flex;
   z-index: 1000;
   color: black;
   margin-top: 100px;
-  margin-right: 50px;
   margin-left: 50px;
   align-items: center;
   justify-content: center;
@@ -69,10 +68,36 @@ export const FriendPostsContainer = styled.div`
   width: 65%;
 `;
 
-export const FriendPostsTitle = styled.h2`
+export const FriendSearchTitle = styled.h2`
   color: black;
 `;
 
-export const FriendPosts = styled.li`
+export const FriendSearch = styled.li`
   list-style: none;
+`;
+
+export const FriendSearchInput = styled.input`
+  width: 300px;
+  height: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+`;
+
+export const FriendSearchButton = styled.button`
+  width: 200px;
+  height: 30px;
+`;
+
+export const FriendSearchResultsContainer = styled.div`
+  font-color: black;
+  display: flex;
+  z-index: 1000;
+  color: black;
+  margin-top: 100px;
+  margin-left: 50px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 65%;
 `;
