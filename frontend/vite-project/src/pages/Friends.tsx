@@ -35,7 +35,6 @@ interface FriendPost {
 export const Friends = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friends, setFriends] = useState([]);
-  const [friendPosts, setFriendPosts] = useState([]);
   const formatDate = (date: string) => {
     const d = new Date(date);
     return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
