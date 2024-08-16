@@ -14,7 +14,7 @@ router = APIRouter(
 @router.get("/", response_model=List[schemas.UserOut])
 def get_users(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     
-    results = db.query(models.User).filter(models.User.email.contains(search)).limit(limit).offset(skip).all()
+    results = db.query(models.User).filter(models.User.username.like('%' + search + '%')).limit(limit).offset(skip).all()
     
     return results
 
