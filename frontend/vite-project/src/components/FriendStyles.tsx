@@ -71,11 +71,6 @@ export const FriendSearchContainer = styled.div`
 export const FriendSearchTitle = styled.h2`
   color: black;
 `;
-
-export const FriendSearch = styled.li`
-  list-style: none;
-`;
-
 export const FriendSearchInput = styled.input`
   width: 300px;
   height: 30px;
@@ -95,9 +90,15 @@ export const FriendSearchResultsContainer = styled.div`
   z-index: 1000;
   color: black;
   margin-top: 100px;
-  margin-left: 50px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 65%;
+`;
+
+export const FriendSearchResult = styled.li`
+  list-style: none;
+`;
+
+export const FriendNoResults = styled.p`
+  color: black;
 `;

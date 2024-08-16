@@ -31,6 +31,7 @@ export const Home = () => {
             email: item.Post.owner.email,
             id: item.Post.owner.id,
             owner_created_at: item.Post.owner.created_at,
+            username: item.Post.owner.username,
           },
           votes: item.votes,
         };
@@ -84,7 +85,7 @@ export const Home = () => {
               <HomePostTitle>{post.title}</HomePostTitle>
               <HomePostText>{post.content}</HomePostText>
               <HomePostText>{formatDate(post.created_at)}</HomePostText>
-              <HomePostText>{post.owner.email}</HomePostText>
+              <HomePostText>{post.owner.username}</HomePostText>
               <HomePostText>Likes : {post.votes}</HomePostText>
               <HomePostLikeButton onClick={() => handleLike(post.id)}>
                 Like

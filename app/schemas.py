@@ -58,9 +58,12 @@ class Vote(BaseModel):
 class UserFriendOut(BaseModel):
     id: int
     email: str
+    username: str
     
 class FriendRequest(BaseModel):
     id: int
+    email: str
+    username: str
     
 class FriendRequestOut(BaseModel):
     
