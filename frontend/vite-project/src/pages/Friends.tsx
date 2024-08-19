@@ -13,6 +13,9 @@ import {
   FriendSearchResultsContainer,
   FriendSearchResult,
   FriendNoResults,
+  AcceptButton,
+  RemoveButton,
+  SendButton,
 } from "../components/FriendStyles";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -28,8 +31,54 @@ export const Friends = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friends, setFriends] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [searchBar, setSearchBar] = useState("");
 
+  const handleAccept = async (id: number) => {
+    try {
+      await axios.post(
+        `http://127.0.0.1:8000/friends/requests/accept/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      getFriends();
+      getFriendRequests();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleRemove = async (id: number) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/friends/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      getFriends();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSend = async (id: number) => {
+    try {
+      await axios.post(
+        `http://127.0.0.1:8000/friends/requests/send/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      getFriendRequests();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const formatDate = (date: string) => {
     const d = new Date(date);
     return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
@@ -109,7 +158,12 @@ export const Friends = () => {
           <div>No Friends</div>
         ) : (
           friends.map((friend: any) => (
-            <FriendList>{friend.username}</FriendList>
+            <FriendList>
+              {friend.username}
+              <RemoveButton onClick={() => handleRemove(friend.id)}>
+                &#10005;
+              </RemoveButton>
+            </FriendList>
           ))
         )}
       </FriendListContainer>
@@ -118,7 +172,6 @@ export const Friends = () => {
         <FriendSearchInput
           type="text"
           onChange={(e) => {
-            setSearchBar(e.target.value);
             getSearchResults(e.target.value);
           }}
           placeholder="Search for friends"
@@ -129,23 +182,32 @@ export const Friends = () => {
             <FriendNoResults>No Results</FriendNoResults>
           ) : (
             searchResults.map((result: any) => (
-              <FriendSearchResult>{result.username}</FriendSearchResult>
+              <FriendSearchResult>
+                {result.username}
+                <SendButton onClick={() => handleSend(result.id)}>
+                  &rarr;
+                </SendButton>
+              </FriendSearchResult>
             ))
           )}
         </FriendSearchResultsContainer>
       </FriendSearchContainer>
-      {friendRequests.length === 0 ? (
-        <div>No Friend Requests</div>
-      ) : (
-        <FriendRequestsContainer>
-          <FriendRequestTitle>Friend Requests </FriendRequestTitle>
-          {friendRequests.map((request: FriendRequest) => (
-            <FriendRequests>
+
+      <FriendRequestsContainer>
+        <FriendRequestTitle>Friend Requests</FriendRequestTitle>
+        {friendRequests.length === 0 ? (
+          <div>No Friend Requests</div>
+        ) : (
+          friendRequests.map((request: FriendRequest) => (
+            <FriendRequests key={request.id}>
               {request.username} : {formatDate(request.created_at)}
+              <AcceptButton onClick={() => handleAccept(request.id)}>
+                &#10003;
+              </AcceptButton>
             </FriendRequests>
-          ))}
-        </FriendRequestsContainer>
-      )}
+          ))
+        )}
+      </FriendRequestsContainer>
     </FriendsContainer>
   );
 };
