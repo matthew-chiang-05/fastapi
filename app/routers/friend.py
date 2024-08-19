@@ -10,7 +10,7 @@ router = APIRouter(
     tags=['Friends']
 )
 
-@router.post("/requests/send/{id}", status_code=status.HTTP_201_CREATED, response_model=List[schemas.FriendRequestOut])
+@router.post("/requests/send/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.FriendRequestOut)
 def send_friend_request(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     
     user = db.query(models.User).filter(models.User.id==id).first()
@@ -90,7 +90,21 @@ def get_friends(db: Session = Depends(get_db), current_user: int = Depends(oauth
     results = db.query(models.Friend).filter(models.Friend.user_id == current_user.id).all()
     
     return results
+
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def remove_friend(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     
+    friend = db.query(models.Friend).filter(models.Friend.user_id==current_user.id, models.Friend.friend_id==id).first()
+    
+    if not friend:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Friend with id: {id} does not exist")
+    
+    db.query(models.Friend).filter(models.Friend.user_id==id, models.Friend.friend_id==current_user.id).delete(synchronize_session=False)
+    
+    db.delete(friend)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
     
     
     
