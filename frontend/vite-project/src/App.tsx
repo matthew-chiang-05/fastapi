@@ -8,6 +8,8 @@ import Login from "./pages/Login";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { AuthProvider } from "./components/AuthContext";
 import CreateUser from "./pages/CreateUser";
+import ThreadWrapper from "./components/ThreadWrapper";
+
 function App() {
   return (
     <AuthProvider>
@@ -48,6 +50,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/messages/:id" element={<ThreadWrapper />}></Route>
         </Routes>
       </Router>
     </AuthProvider>

@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { Link } from "react-router-dom";
 
 export const FriendsContainer = styled.div`
   font-color: black;
@@ -156,4 +157,12 @@ export const SendButton = styled.button`
   &:hover {
     background-color: darkblue;
   }
+`;
+
+export const FriendLink = styled(Link)`
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
 `;

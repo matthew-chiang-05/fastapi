@@ -16,6 +16,7 @@ import {
   AcceptButton,
   RemoveButton,
   SendButton,
+  FriendLink,
 } from "../components/FriendStyles";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -159,7 +160,10 @@ export const Friends = () => {
         ) : (
           friends.map((friend: any) => (
             <FriendList>
-              {friend.username}
+              <FriendLink to={`/messages/${friend.id}`}>
+                {friend.username}
+              </FriendLink>
+
               <RemoveButton onClick={() => handleRemove(friend.id)}>
                 &#10005;
               </RemoveButton>
