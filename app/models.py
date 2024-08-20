@@ -56,3 +56,16 @@ class Friend(Base):
     user = relationship("User", foreign_keys=[user_id])
     
     friend = relationship("User", foreign_keys=[friend_id])
+    
+class Message(Base):
+    __tablename__ = "messages"
+    
+    id = Column(Integer, primary_key=True, nullable=False)
+    content = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default= text('NOW()'))
+    sender_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), nullable=False)
+    receiver_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), nullable=False)
+    
+    sender = relationship("User", foreign_keys=[sender_id])
+    
+    receiver = relationship("User", foreign_keys=[receiver_id])

@@ -82,3 +82,17 @@ class FriendRecieveOut(BaseModel):
 class FriendlistOut(BaseModel):
     
     friend: UserFriendOut
+    
+class MessageOut(BaseModel):
+    content: str
+    created_at: datetime
+    sender_id: int
+    receiver_id: int
+    class Config:
+        from_attributes = True
+
+class MessageIn(BaseModel):
+    content: str
+    receiver_id: int
+    class Config:
+        from_attributes = True
