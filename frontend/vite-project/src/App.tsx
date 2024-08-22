@@ -35,14 +35,6 @@ function App() {
             }
           />
           <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route
             path="/post"
             element={
               <PrivateRoute>

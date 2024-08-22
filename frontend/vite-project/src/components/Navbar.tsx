@@ -14,12 +14,6 @@ export const Navbar = () => {
           <NavLinks to="/friends">Friends</NavLinks>
         </NavItem>
         <NavItem>
-          <NavLinks to="/profile">Profile</NavLinks>
-        </NavItem>
-        <NavItem>
-          <NavLinks to="/messages">Messages</NavLinks>
-        </NavItem>  
-        <NavItem>
           {!isAuthenticated && <NavLinks to="/login">Login</NavLinks>}
           {isAuthenticated && (
             <NavLinks to="/login" onClick={logout}>
