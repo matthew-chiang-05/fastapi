@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 from .. import models, schemas, oauth2
 from .. database import get_db
 from typing import List, Optional
-from sqlalchemy import func, or_, and_
+from sqlalchemy import func, or_, and_, case
 
 router = APIRouter(
     prefix="/messages",
     tags=['Messages']
 )
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.MessageOut)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.MessageIn)
 def create_messages(message: schemas.MessageIn, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     
     friends = db.query(models.Friend).filter(models.Friend.user_id == current_user.id, models.Friend.friend_id == message.receiver_id ).first()
@@ -29,4 +29,10 @@ def get_messages(id: int, db: Session = Depends(get_db), current_user: int = Dep
 
     messages = db.query(models.Message).filter(or_(and_(models.Message.sender_id == id, models.Message.receiver_id == current_user.id), and_(models.Message.sender_id == current_user.id,models.Message.receiver_id == id))).order_by(models.Message.created_at).all()
 
-    return messages
+    result = []
+    for message in messages:
+        message_dict = message.__dict__.copy()  # Convert SQLAlchemy object to dict
+        message_dict['sent'] = 1 if message.sender_id == current_user.id else 0  # Add 'sent' field
+        result.append(schemas.MessageOut(**message_dict))  # Create schema instance with the updated dict
+
+    return result

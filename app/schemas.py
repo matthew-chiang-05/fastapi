@@ -88,6 +88,7 @@ class MessageOut(BaseModel):
     created_at: datetime
     sender_id: int
     receiver_id: int
+    sent: Literal[0, 1]
     class Config:
         from_attributes = True
 
