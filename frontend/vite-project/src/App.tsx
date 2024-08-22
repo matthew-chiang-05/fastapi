@@ -1,7 +1,6 @@
 import { Navbar } from "./components/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
-import { Profile } from "./pages/Profile";
 import { Friends } from "./pages/Friends";
 import Post from "./pages/Post";
 import Login from "./pages/Login";
